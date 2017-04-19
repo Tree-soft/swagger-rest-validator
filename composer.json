@@ -1,0 +1,36 @@
+{
+    "name": "tree-soft/swagger-rest-validator",
+    "description": "Library for testing rest API by swagger doc",
+    "keywords": [ "php", "swagger", "rest", "api"],
+    "homepage": "https://github.com/Tree-soft/swagger-rest-validator",
+    "license": "MIT",
+    "type": "library",
+    "require": {
+        "php": ">=5.5",
+        "epfremme/swagger-php": "^2.0",
+        "justinrainbow/json-schema": "^5.2"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7",
+        "symfony/var-dumper": "^3.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "TreeSoft\\SwaggerRestValidator\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": { "TreeSoft\\SwaggerRestValidator\\Tests\\": "tests/" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1.x-dev"
+        }
+    },
+    "authors": [
+        {
+            "name": "Vladimir Barmotin",
+            "email": "v.barmotin@mildberry.com"
+        }
+    ]
+}

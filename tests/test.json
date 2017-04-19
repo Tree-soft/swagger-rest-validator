@@ -1,0 +1,112 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Test API",
+    "version": "1.0.0",
+    "title": "Test API",
+    "contact": {
+      "email": "example@mail.com"
+    }
+  },
+  "paths": {
+    "/users/{id}": {
+      "get": {
+        "summary": "returns user",
+        "operationId": "getUser",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "user data object",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "bad input parameter"
+          },
+          "404": {
+            "description": "user not found"
+          }
+        },
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "description": "user id",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "default": 2
+          },
+          {
+            "in": "query",
+            "name": "requireVar",
+            "description": "test require var",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "default": 1
+          }
+        ]
+      }
+    },
+    "/group_leader": {
+      "get": {
+        "summary": "returns group leader",
+        "operationId": "getGroupLeader",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "group leader object",
+            "schema": {
+              "$ref": "#/definitions/GroupLeader"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "id",
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int32",
+          "example": 1
+        },
+        "name": {
+          "type": "string",
+          "example": "Vovan"
+        }
+      }
+    },
+    "GroupLeader": {
+      "allOf": [
+        {
+          "$ref": "#/definitions/User"
+        },
+        {
+          "properties": {
+            "groupName": {
+              "example": "family"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "host": "test",
+  "basePath": "",
+  "schemes": [
+    "http"
+  ]
+}
