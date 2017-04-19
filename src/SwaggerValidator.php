@@ -63,8 +63,9 @@ class SwaggerValidator
      * @param DataProviderInterface $dataProvider
      * @param Swagger $swagger
      * @param array $swaggerDocArray
-     * @param string $baseURL
+     * @param string $host
      * @param HeaderProviderInterface|null $headerProvider
+     * @internal param string $baseURL
      * @internal param string $jsonPath
      */
     public function __construct(
@@ -72,12 +73,12 @@ class SwaggerValidator
         DataProviderInterface $dataProvider,
         Swagger $swagger,
         array $swaggerDocArray,
-        $baseURL = 'localhost',
+        $host = '127.0.0.1',
         HeaderProviderInterface $headerProvider = null
     )
     {
         $this->client = $client;
-        $this->baseURL = $baseURL;
+        $this->baseURL = $host.$swagger->getBasePath();
         $this->dataProvider = $dataProvider;
         $this->headerProvider = $headerProvider;
 
