@@ -44,12 +44,12 @@ class SwaggerValidator
     /**
      * @var DataProviderInterface
      */
-    private $dataProvider;
+    protected $dataProvider;
 
     /**
      * @var HeaderProviderInterface
      */
-    private $headerProvider;
+    protected $headerProvider;
 
     /**
      * @var ArrayCollection
