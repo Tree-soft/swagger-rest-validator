@@ -57,7 +57,7 @@ class SwaggerTest extends TestCase implements DataProviderInterface
         $this->assertFalse($swaggerValidator->validate());
 
         $this->assertEquals(2, $swaggerValidator->getErrors()->count());
-        $this->assertEquals('The property name is required', $swaggerValidator->getErrors()->get(0)->getMessage());
+        $this->assertEquals('name - The property name is required', $swaggerValidator->getErrors()->get(0)->getMessage());
         $this->assertEquals('Expected 400 code, got 42', $swaggerValidator->getErrors()->get(1)->getMessage());
     }
 

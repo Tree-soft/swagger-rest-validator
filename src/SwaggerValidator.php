@@ -232,7 +232,7 @@ class SwaggerValidator
             $validator->validate($data, $this->getResponseValidationSchema($path, $method, $code, $responseSchema));
 
             foreach ($validator->getErrors() as $error) {
-                $this->errors->add(new Error($error['message'], $code, $clientRequest, $clientResponse));
+                $this->getErrors()->add(new Error(($error['property'] ? $error['property'] . ' - ' : '') . $error['message'], $code, $clientRequest, $clientResponse));
             }
         }
     }
