@@ -97,22 +97,7 @@ class SwaggerValidator
             foreach($pathEntity->getOperations() as $method => $operation) {
                 /** @var Response $response */
                 foreach($operation->getResponses() as $code => $response) {
-
-                    $clientRequest = $this->buildRequest($path, $method, $code, $operation->getParameters());
-                    $clientResponse = $this->sendRequest($clientRequest, $code);
-
-                    $data = json_decode($clientResponse->getBody());
-
-                    $responseSchema = $response->getSchema();
-
-                    if (!is_null($responseSchema)) {
-                        $validator = new Validator();
-                        $validator->validate($data, $this->getResponseValidationSchema($path, $method, $code, $responseSchema));
-
-                        foreach ($validator->getErrors() as $error) {
-                            $this->errors->add(new Error($error['message'], $code, $clientRequest, $clientResponse));
-                        }
-                    }
+                    $this->validateOperation($path, $method, $code, $operation->getParameters(), $response->getSchema());
                 }
             }
         }
@@ -154,10 +139,11 @@ class SwaggerValidator
      * @param string $method
      * @param int $code
      * @param ArrayCollection $operationParameters
+     * @param array $operationData
      *
      * @return ClientRequest
      */
-    protected function buildRequest($path, $method, $code, $operationParameters)
+    protected function buildRequest($path, $method, $code, $operationParameters, $operationData)
     {
         $requestBuilder = new RequestBuilder($this->baseURL.$path, $method);
 
@@ -166,9 +152,8 @@ class SwaggerValidator
         }
 
         if(!is_null($operationParameters)) {
-            $parameters = $this->dataProvider->getData($path, $method, $code);
 
-            foreach ($parameters as $key => $value) {
+            foreach ($operationData as $key => $value) {
                 $parameter = $operationParameters->filter(function($item) use ($key){
                     return $item->getName() == $key;
                 })->first();
@@ -224,5 +209,31 @@ class SwaggerValidator
     protected function getDefinitionName(RefSchema $refSchema)
     {
         return explode('/', $refSchema->getRef())[2];
+    }
+
+    /**
+     * @param $path
+     * @param $method
+     * @param $code
+     * @param $parameters
+     * @param SchemaInterface $responseSchema
+     */
+    protected function validateOperation($path, $method, $code, $parameters, SchemaInterface $responseSchema = null)
+    {
+        $operationData = $this->dataProvider->getData($path, $method, $code);
+
+        $clientRequest = $this->buildRequest($path, $method, $code, $parameters, $operationData);
+        $clientResponse = $this->sendRequest($clientRequest, $code);
+
+        $data = json_decode($clientResponse->getBody());
+
+        if (!is_null($responseSchema)) {
+            $validator = new Validator();
+            $validator->validate($data, $this->getResponseValidationSchema($path, $method, $code, $responseSchema));
+
+            foreach ($validator->getErrors() as $error) {
+                $this->errors->add(new Error($error['message'], $code, $clientRequest, $clientResponse));
+            }
+        }
     }
 }
